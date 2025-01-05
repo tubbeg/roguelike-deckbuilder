@@ -15,7 +15,6 @@ export class SceneExt extends Scene {
         this.u = u;
     }
 
-    //
     preload (){
         this.p(this);
     }
