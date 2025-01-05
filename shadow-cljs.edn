@@ -1,0 +1,15 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src/dev"
+  "src/main"
+  "src/test"]
+
+ :dependencies
+ [[brute "0.4.0"]
+  [prismatic/schema "1.4.1"]]
+
+ :dev-http {3000 "public"}
+ :builds
+ {:frontend
+  {:target :browser
+   :modules {:main {:init-fn game.core/init-fn}}}}}
