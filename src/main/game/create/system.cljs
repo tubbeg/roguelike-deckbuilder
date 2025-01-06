@@ -1,12 +1,13 @@
 (ns game.create.system
   (:require [brute.system :as sys]
             [game.systems.draw-cards :as draw]
-            [game.create.card-entity :as ce]))
+            [game.create.card-entity :as ce]
+            [game.systems.position-cards :as pc]))
 
 (defn add-systems [system]
   (-> system
-      (sys/add-system-fn draw/draw-cards)))
-
+      (sys/add-system-fn draw/draw-cards)
+      (sys/add-system-fn pc/position-cards!)))
 
 (defn update-world! [system atm]
   (swap! atm (fn [_] system)))

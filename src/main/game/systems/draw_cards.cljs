@@ -32,17 +32,39 @@
   (let [d (-> system (bent/get-component e c/DeckComp))]
     (-> system (bent/remove-component e d))))
 
-(defn add-hand-comp [system entity]
-  (let [h (c/HandComp. "foo")]
+(defn add-hand-comp [system [order entity]]
+  (let [h (c/->HandComp order)]
     (bent/add-component system entity h)))
 
 (defn remove-deck-entities [system entities]
   (let [f #(remove-deck-comp %1 %2)]
     (->> entities (reduce f system))))
 
+(defn get-rank [system entity]
+  (-> system
+      (bent/get-component entity c/RankComp)
+      :rank))
+
+(defn rank-to-value [rank]
+  (case rank
+    :ace 14
+    :king 13
+    :queen 12
+    :jack 11
+    rank))
+
+(defn compare-rank-fn [system entity]
+  (-> system (get-rank entity) rank-to-value))
+
+(defn create-order [system entities]
+  (let [coll (sort-by #(compare-rank-fn system %) entities)]
+    (for [i (-> coll count range)]
+      [i (nth entities i)])))
+
 (defn add-hand-entities [system entities] 
-  (let [f #(add-hand-comp %1 %2)]
-     (->> entities (reduce f system))))
+  (let [coll (create-order system entities)
+        f #(add-hand-comp %1 %2)]
+     (->> coll (reduce f system))))
 
 (defn change-comps [system entities]
   (-> system
@@ -63,9 +85,8 @@
          (change-comps system)
          log-entities)))
 
-
 (defn draw-cards [system delta]
   (if (has-full-hand? system)
+    ;(-> system log-entities)
     system
-     (add-hand-comps system)
-    ))
+    (add-hand-comps system)))

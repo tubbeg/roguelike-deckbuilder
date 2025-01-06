@@ -4,8 +4,6 @@
             [game.components :as component]
             [game.config :as conf]))
 
-(defrecord Mycomponent [x y])
-
 (defn add-image! [this id x y]
   (.. this -add (image x y id)))
 
@@ -27,14 +25,11 @@
         sprte (.. this -add (sprite x y id)) 
         sp (component/->SpriteComp sprte)
         e (bentity/create-entity)
-        compo (->Mycomponent 2 3)
         rnk (component/->RankComp rank)
         st (component/->SuitComp suit)
         dcomp (component/->DeckComp)]
     (-> world
         (bentity/add-entity e)
-        (bentity/add-component e compo)
-        (bentity/remove-component e compo)
         (bentity/add-component e rnk)
         (bentity/add-component e st)
         (bentity/add-component e dcomp)
