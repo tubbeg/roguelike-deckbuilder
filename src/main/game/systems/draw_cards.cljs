@@ -46,12 +46,14 @@
       :rank))
 
 (defn rank-to-value [rank]
-  (case rank
-    :ace 14
-    :king 13
-    :queen 12
-    :jack 11
-    rank))
+  (if (number? rank)
+    rank
+    (case rank
+      :ace 14
+      :king 13
+      :queen 12
+      :jack 11
+      2)))
 
 (defn compare-rank-fn [system entity]
   (-> system (get-rank entity) rank-to-value))
@@ -59,7 +61,7 @@
 (defn create-order [system entities]
   (let [coll (sort-by #(compare-rank-fn system %) entities)]
     (for [i (-> coll count range)]
-      [i (nth entities i)])))
+      [i (nth coll i)])))
 
 (defn add-hand-entities [system entities] 
   (let [coll (create-order system entities)
