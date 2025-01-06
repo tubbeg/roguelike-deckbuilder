@@ -4,8 +4,7 @@
             [game.config :as conf]
             [brute.entity :as ent]
             [brute.system :as sys]
-            [game.load :as ld]
-            [game.components :as c]
+            [game.load :as preload]
             [game.create.system :as cs]))
 
 
@@ -15,7 +14,7 @@
 
 (defn p [this]
   (println "PRELOADING")
-  (ld/load-deck! this))
+  (preload/load-deck! this))
 
 (defn update-world-atom! [system ]
   (swap! game-system (fn [_] system)))

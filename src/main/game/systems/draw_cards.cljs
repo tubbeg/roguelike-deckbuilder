@@ -3,30 +3,10 @@
             [game.components :as c]))
 
 (comment
-  "Discovered a fairly simple error. Do not attempt to
-   use ent as a binding. Basically clojure will confuse
-   the binding with the alias. Extremely simple error, but
-   very time consuming"
+  "Be extremely careful when using an alias name. If you use
+   the same name as a let binding the you will experience some
+   very painful bugs"
   )
-(defrecord Position [x y])
-(defrecord Velocity [x y])
-
-
-
-(defn test-this [system]
-  (let [entity (bent/create-entity)
-        pos (->Position 5 5)
-        vel (->Velocity 10 10)]
-    (-> system
-        (bent/add-entity entity)
-        (bent/add-component entity pos)
-        (bent/add-component entity vel)
-        (bent/remove-component entity pos))))
-
-
-(-> (bent/create-system)
-    (test-this))
-
 
 (comment
   "For now, the default hand size will be 5. I will
@@ -50,9 +30,6 @@
 
 (defn remove-deck-comp [system e] 
   (let [d (-> system (bent/get-component e c/DeckComp))]
-    (println "DECK INSTANCE IS" d)
-    (println "ENT" e)
-    (println "System" system) 
     (-> system (bent/remove-component e d))))
 
 (defn add-hand-comp [system entity]
@@ -80,7 +57,6 @@
 (defn add-hand-comps [system]
   (let [mx default-hand-size
         ents (get-deck-ents system)]
-    (println "NR OF DECK ENTS" (count ents))
     (->> ents
          shuffle
          (take mx)
