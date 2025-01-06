@@ -6,7 +6,7 @@
             [brute.system :as sys]
             [game.load :as ld]
             [game.components :as c]
-            [game.create.card-entity :as ce]))
+            [game.create.system :as cs]))
 
 
 (def game-system
@@ -17,18 +17,21 @@
   (println "PRELOADING")
   (ld/load-deck! this))
 
+(defn update-world-atom! [system ]
+  (swap! game-system (fn [_] system)))
+
 (defn update-world [this time delta]
-  (let [sw! #(swap! game-system (fn [_] %))]
    (-> game-system
        deref
        (sys/process-one-game-tick delta)
-       sw!)))
+       update-world-atom!))
 
 (defn launch-game []
   (let [auto phaser/AUTO
         scene-conf nil
-        create #(ce/create-world % game-system)
-        s (new xt/SceneExt scene-conf p create update-world)
+        c #(cs/create-world % game-system)
+        u update-world
+        s (new xt/SceneExt scene-conf p c u)
         conf (conf/create-config s auto)]
     (new phaser/Game conf)))
 

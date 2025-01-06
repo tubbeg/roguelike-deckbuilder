@@ -11,5 +11,6 @@
  :dev-http {3000 "public"}
  :builds
  {:frontend
-  {:target :browser
+  {:target :browser 
+   :compiler-options {:output-feature-set :es6}
    :modules {:main {:init-fn game.core/init-fn}}}}}

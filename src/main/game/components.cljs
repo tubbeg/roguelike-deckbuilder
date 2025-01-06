@@ -6,6 +6,6 @@
 (defrecord RankComp [rank])
 (defrecord SuitComp [suit])
 (defrecord SpriteComp [sprite])
-(defrecord HandComp [])
-(defrecord DiscardComp [])
+(defrecord HandComp [hand])
+(defrecord DiscardComp [discard])
 (defrecord DeckComp [])
