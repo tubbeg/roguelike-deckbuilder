@@ -21,22 +21,21 @@
 (defn toggle-select [ptr]
   (this-as this
    (let [e (. this (getData "entity"))
-         is-clicked? (. this (getData "is-clicked?"))
-         toggle (not is-clicked?)]
-     ;(println "Clicked?" is-clicked?)
+         debug (. this (getData "debug-info")) 
+         ;is-clicked? (. this (getData "is-clicked?"))
+         ;toggle (not is-clicked?)
+         ]
      (println "Entity: " e)
-     (. this (setData "is-clicked?" true))
-     (comment (if (not is-clicked?)
-       (.. this -postFX (addGlow))
-       (.. this -postFX (clear)))
-     ))))
+     (println "Debug info: " debug)
+     (. this (setData "is-clicked?" true)))))
 
-(defn add-sprite [this x y id entity]
+(defn add-sprite [this debug-info x y id entity]
   (let [s (.. this -add (sprite x y id))
-        d #js {:draggable true}] 
+        d #js {:draggable true}]
     (. s (setInteractive d))
+    (. s (setData "debug-info" debug-info))
     (. s (setData "is-clicked?" false))
-    (. s (setData "entity" entity)) 
+    (. s (setData "entity" entity))
     (add-ptr-down s toggle-select)
     s))
 
@@ -44,7 +43,7 @@
   (let [[x y] (rand-pos)
         id (str suit rank)
         e (bentity/create-entity)
-        sprte (add-sprite this x y id e) 
+        sprte (add-sprite this [rank suit] x y id e) 
         sp (component/->SpriteComp sprte)
         rnk (component/->RankComp rank)
         st (component/->SuitComp suit)
