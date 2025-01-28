@@ -16,14 +16,14 @@ export class SceneExt extends Scene {
     }
 
     preload (){
-        this.p(this);
+        this.p();
     }
 
     create(){
-        this.c(this);
+        this.c();
     }
 
     update(time,delta){
-        this.u(this,time,delta);
+        this.u(time,delta);
     }
 }

@@ -3,6 +3,8 @@
 
 (def default-asset-path "./assets/CARDS/")
 
+(def default-ui-asset-path "./assets/UI/")
+
 (defn load-image! [this id path]
   (.. this -load (image id path)))
 
@@ -44,6 +46,10 @@
     (let [p (rank-suit-to-path rank suit)
           id (str suit rank)]
       (load-image! this id p))))
+
+
+(defn load-ui-assets! [this]
+  )
 
 (defn load-deck! [this]
   (load-suit! this :diamonds default-52-deck)

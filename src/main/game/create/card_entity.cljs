@@ -15,16 +15,37 @@
   (let [[x y] conf/def-size]
     [(rand-int x) (rand-int y)]))
 
-(defn log-system [system]
-  (println system)
-  system)
+(defn add-ptr-down [sprite fn]
+  (. sprite (on "pointerdown" fn)))
+
+(defn toggle-select [ptr]
+  (this-as this
+   (let [e (. this (getData "entity"))
+         is-clicked? (. this (getData "is-clicked?"))
+         toggle (not is-clicked?)]
+     ;(println "Clicked?" is-clicked?)
+     (println "Entity: " e)
+     (. this (setData "is-clicked?" true))
+     (comment (if (not is-clicked?)
+       (.. this -postFX (addGlow))
+       (.. this -postFX (clear)))
+     ))))
+
+(defn add-sprite [this x y id entity]
+  (let [s (.. this -add (sprite x y id))
+        d #js {:draggable true}] 
+    (. s (setInteractive d))
+    (. s (setData "is-clicked?" false))
+    (. s (setData "entity" entity)) 
+    (add-ptr-down s toggle-select)
+    s))
 
 (defn create-card-entity [world this rank suit]
   (let [[x y] (rand-pos)
         id (str suit rank)
-        sprte (.. this -add (sprite x y id)) 
-        sp (component/->SpriteComp sprte)
         e (bentity/create-entity)
+        sprte (add-sprite this x y id e) 
+        sp (component/->SpriteComp sprte)
         rnk (component/->RankComp rank)
         st (component/->SuitComp suit)
         dcomp (component/->DeckComp)]

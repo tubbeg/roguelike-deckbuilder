@@ -8,6 +8,7 @@
    very painful bugs"
   )
 
+
 (comment
   "For now, the default hand size will be 5. I will
    change this to a variable value later.")
@@ -61,7 +62,7 @@
 (defn create-order [system entities]
   (let [coll (sort-by #(compare-rank-fn system %) entities)]
     (for [i (-> coll count range)]
-      [i (nth coll i)])))
+      [i (nth coll i)]))) 
 
 (defn add-hand-entities [system entities] 
   (let [coll (create-order system entities)

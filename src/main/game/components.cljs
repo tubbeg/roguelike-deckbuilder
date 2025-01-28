@@ -7,6 +7,6 @@
 (defrecord SuitComp [suit])
 (defrecord SpriteComp [sprite])
 (defrecord HandComp [order])
-(defrecord DiscardComp [])
-(defrecord DragComp [])
+(defrecord DragComp [x y])
 (defrecord DeckComp [])
+(defrecord SelComp [])

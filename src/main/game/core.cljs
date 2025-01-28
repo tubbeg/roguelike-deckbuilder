@@ -12,23 +12,27 @@
   (-> (ent/create-system)
       atom))
 
-(defn p [this]
-  (println "PRELOADING")
-  (preload/load-deck! this))
+(defn p []
+  (this-as this
+   (println "PRELOADING")
+   (preload/load-deck! this)))
 
 (defn update-world-atom! [system ]
   (swap! game-system (fn [_] system)))
 
-(defn update-world [this time delta]
+(defn update-world [time delta]
    (-> game-system
        deref
        (sys/process-one-game-tick delta)
        update-world-atom!))
 
+(defn create []
+  (this-as this (cs/create-world this game-system)))
+
 (defn launch-game []
-  (let [auto phaser/AUTO
+  (let [auto phaser/AUTO 
         scene-conf nil
-        c #(cs/create-world % game-system)
+        c create
         u update-world
         s (new xt/SceneExt scene-conf p c u)
         conf (conf/create-config s auto)]

@@ -57,9 +57,11 @@
 (defn get-hand-comp [s e]
   (bent/get-component s e c/HandComp))
 
+(defn get-order [system entity]
+  (-> system (get-hand-comp entity) :order))
+
 (defn order-to-pos [system entity]
-  (let [oc (get-hand-comp system entity) 
-        o (:order oc)
+  (let [o (get-order system entity)
         mult (-> o (+ 1) (* 50))
         [x y] default-hand-pos]
         ;(println "Order: " o) 
@@ -72,7 +74,11 @@
       (when (has-no-drag-comp? s entity) 
         (move-entity! s entity pos)))))
 
+
 (defn position-cards! [system delta]
-  (position-deck-cards! system)
-  (position-hand-cards! system)
-  system)
+  (let [sys-update ; (move-overlap system)
+        system
+        ]
+    (position-deck-cards! sys-update)
+    (position-hand-cards! sys-update)
+    system))
